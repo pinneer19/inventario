@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="warehouse_name">Warehouse</string>
+    <string name="input_warehouse_name">Enter warehouse name</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="wrong_credentials">Wrong credentials</string>
+    <string name="register_fail">Registration failed. Try again</string>
+    <string name="create_organization">Create your organization</string>
+    <string name="creating_warehouse">Creating warehouse</string>
+    <string name="warehouses">Warehouses</string>
+    <string name="organizations">Organizations</string>
+    <string name="creating_organization">Creating organization</string>
+    <string name="manager_was_assigned">Manager was assigned successfully</string>
+    <string name="assigning_manager">Assigning manager</string>
+    <string name="enter_manager_username">Enter manager username</string>
+    <string name="request_approvement">Request approvement</string>
+    <string name="unassign_approve">Are u sure to unassign selected manager?</string>
+    <string name="manager_already_assigned">Manager was already assigned</string>
+    <string name="manager_not_found">Manager not found or already assigned to warehouse</string>
+    <string name="create_organization_fail">Failed to create organization</string>
+    <string name="assign">Assign</string>
+    <string name="manager_was_unassigned">Manager was unassigned successfully</string>
+    <string name="delete_approve">Are u sure to delete selected warehouse?</string>
+</resources>

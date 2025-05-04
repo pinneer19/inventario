@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Inventario.Splash" parent="Theme.SplashScreen.IconBackground">
+        <item name="android:windowSplashScreenBackground">#737BA4</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_app_anim</item>
+        <item name="postSplashScreenTheme">@style/Theme.Inventario</item>
+    </style>
+</resources>

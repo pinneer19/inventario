@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">inventario</string>
+    <string name="username">Username</string>
+    <string name="username_placeholder">Enter your username</string>
+    <string name="password">Password</string>
+    <string name="password_placeholder">Enter your password</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="or">or</string>
+    <string name="login">Login</string>
+    <string name="navigate_to_register">Don\'t have an account? Register</string>
+    <string name="register">Register</string>
+    <string name="navigate_to_login">Already have an account? Login</string>
+    <string name="admin">Admin</string>
+    <string name="manager">Manager</string>
+    <string name="loading">Please wait…</string>
+    <string name="add_warehouse">Add warehouse</string>
+    <string name="no_warehouses">Organization has no warehouses yet</string>
+    <string name="organization">Organization</string>
+    <string name="enter_organization_name">Enter organization name</string>
+    <string name="add_organization">Add organization</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
+</resources>
