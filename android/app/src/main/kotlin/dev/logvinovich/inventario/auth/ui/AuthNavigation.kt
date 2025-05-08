@@ -9,7 +9,7 @@ import dev.logvinovich.inventario.auth.ui.login.loginScreen
 import dev.logvinovich.inventario.auth.ui.login.onNavigateToLogin
 import dev.logvinovich.inventario.auth.ui.register.onNavigateToRegister
 import dev.logvinovich.inventario.auth.ui.register.registerScreen
-import dev.logvinovich.inventario.main.ui.onNavigateToMainGraph
+import dev.logvinovich.inventario.main.onNavigateToMainGraph
 import kotlinx.serialization.Serializable
 
 @Serializable

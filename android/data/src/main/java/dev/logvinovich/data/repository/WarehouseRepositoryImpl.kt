@@ -4,10 +4,13 @@ import dev.logvinovich.data.api.assignManagerToWarehouse
 import dev.logvinovich.data.api.createWarehouse
 import dev.logvinovich.data.api.deleteWarehouseById
 import dev.logvinovich.data.api.getOrganizationWarehouses
+import dev.logvinovich.data.api.getWarehouseProducts
 import dev.logvinovich.data.api.unassignManagerFromWarehouse
-import dev.logvinovich.data.model.AssignManagerRequest
-import dev.logvinovich.data.model.UnassignManagerRequest
-import dev.logvinovich.data.model.WarehouseDto
+import dev.logvinovich.data.model.warehouse.AssignManagerRequest
+import dev.logvinovich.data.model.warehouse.UnassignManagerRequest
+import dev.logvinovich.data.model.warehouse.WarehouseDto
+import dev.logvinovich.domain.model.InventoryItem
+import dev.logvinovich.domain.model.Product
 import dev.logvinovich.domain.model.User
 import dev.logvinovich.domain.model.Warehouse
 import dev.logvinovich.domain.repository.WarehouseRepository

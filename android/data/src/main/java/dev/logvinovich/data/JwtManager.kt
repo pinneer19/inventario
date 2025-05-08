@@ -8,12 +8,9 @@ import com.auth0.android.jwt.DecodeException
 import com.auth0.android.jwt.JWT
 import dagger.Lazy
 import dev.logvinovich.data.api.refreshAccessToken
-import dev.logvinovich.data.model.AuthTokenDto
-import dev.logvinovich.domain.model.AuthToken
+import dev.logvinovich.data.model.auth.AuthTokenDto
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
 import io.ktor.client.plugins.auth.providers.BearerTokens
-import io.ktor.client.statement.HttpResponse
 import kotlinx.coroutines.flow.first
 import java.util.Date
 import javax.inject.Inject

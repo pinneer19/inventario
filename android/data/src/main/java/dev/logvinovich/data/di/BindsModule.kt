@@ -5,10 +5,14 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.logvinovich.data.repository.AuthRepositoryImpl
+import dev.logvinovich.data.repository.InventoryItemRepositoryImpl
 import dev.logvinovich.data.repository.OrganizationRepositoryImpl
+import dev.logvinovich.data.repository.ProductRepositoryImpl
 import dev.logvinovich.data.repository.WarehouseRepositoryImpl
 import dev.logvinovich.domain.repository.AuthRepository
+import dev.logvinovich.domain.repository.InventoryItemRepository
 import dev.logvinovich.domain.repository.OrganizationRepository
+import dev.logvinovich.domain.repository.ProductRepository
 import dev.logvinovich.domain.repository.WarehouseRepository
 import javax.inject.Singleton
 
@@ -32,4 +36,16 @@ abstract class BindsModule {
     abstract fun bindWarehouseRepository(
         warehouseRepositoryImpl: WarehouseRepositoryImpl
     ): WarehouseRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindInventoryItemRepository(
+        inventoryItemRepositoryImpl: InventoryItemRepositoryImpl
+    ): InventoryItemRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindProductRepository(
+        productRepositoryImpl: ProductRepositoryImpl
+    ): ProductRepository
 }

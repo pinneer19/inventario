@@ -10,9 +10,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.logvinovich.data.JwtManager
 import dev.logvinovich.domain.model.AuthToken
 import dev.logvinovich.domain.model.Role
-import dev.logvinovich.domain.usecase.GoogleAuthUseCase
-import dev.logvinovich.domain.usecase.LoginUseCase
-import dev.logvinovich.domain.usecase.RegisterUseCase
+import dev.logvinovich.domain.usecase.auth.GoogleAuthUseCase
+import dev.logvinovich.domain.usecase.auth.LoginUseCase
+import dev.logvinovich.domain.usecase.auth.RegisterUseCase
 import dev.logvinovich.inventario.auth.util.getUserRole
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

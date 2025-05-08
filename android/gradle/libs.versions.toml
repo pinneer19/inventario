@@ -1,5 +1,6 @@
 [versions]
 agp = "8.9.2"
+coil = "3.1.0"
 coreSplashscreen = "1.0.1"
 credentialsPlayServicesAuth = "1.5.0"
 datastorePreferences = "1.1.4"
@@ -19,6 +20,7 @@ composeBom = "2025.04.01"
 hilt = "2.56.2"
 ktor = "3.1.2"
 navigationCompose = "2.8.9"
+pagingVersion = "3.3.6"
 uiTextGoogleFonts = "1.8.0"
 
 [libraries]
@@ -30,7 +32,11 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingVersion" }
+androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingVersion" }
 androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }

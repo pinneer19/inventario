@@ -56,7 +56,7 @@ class SecurityConfig(
                 })
             }
             .authorizeHttpRequests {
-                it.requestMatchers("/user/**", "/test-sample").permitAll()
+                it.requestMatchers("/user/**", "/products/image/**").permitAll()
                 it.anyRequest().authenticated()
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }

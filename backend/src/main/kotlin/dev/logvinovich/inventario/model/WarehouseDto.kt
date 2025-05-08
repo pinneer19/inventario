@@ -1,5 +1,6 @@
 package dev.logvinovich.inventario.model
 
+import dev.logvinovich.inventario.entity.Organization
 import dev.logvinovich.inventario.entity.User
 import dev.logvinovich.inventario.entity.Warehouse
 

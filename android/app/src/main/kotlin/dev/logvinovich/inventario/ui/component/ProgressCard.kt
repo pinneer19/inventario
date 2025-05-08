@@ -24,8 +24,12 @@ import androidx.compose.ui.unit.dp
 import dev.logvinovich.inventario.R
 
 @Composable
-fun ProgressCard(isLoading: Boolean) {
+fun ProgressCard(
+    isLoading: Boolean,
+    modifier: Modifier = Modifier
+) {
     AnimatedVisibility(
+        modifier = modifier,
         visible = isLoading,
         enter = fadeIn(),
         exit = fadeOut()

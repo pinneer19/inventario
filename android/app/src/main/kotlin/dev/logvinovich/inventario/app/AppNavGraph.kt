@@ -21,8 +21,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import dev.logvinovich.inventario.auth.ui.AuthGraph
 import dev.logvinovich.inventario.auth.ui.authNavigation
-import dev.logvinovich.inventario.main.ui.MainGraph
-import dev.logvinovich.inventario.main.ui.mainNavigation
+import dev.logvinovich.inventario.main.MainGraph
+import dev.logvinovich.inventario.main.mainNavigation
 import dev.logvinovich.inventario.splash.viewmodel.TokenUiState
 import dev.logvinovich.inventario.ui.util.ObserveAsEvents
 import dev.logvinovich.inventario.ui.util.SnackbarController

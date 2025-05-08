@@ -3,6 +3,7 @@ package dev.logvinovich.data.util
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.request
 import io.ktor.http.HttpStatusCode
 
 suspend inline fun <reified T> HttpClient.apiRequest(

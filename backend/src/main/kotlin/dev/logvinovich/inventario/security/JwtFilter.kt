@@ -44,7 +44,6 @@ class JwtFilter(
                 }
                 response.status = HttpServletResponse.SC_UNAUTHORIZED
                 return
-
             }
         }
 

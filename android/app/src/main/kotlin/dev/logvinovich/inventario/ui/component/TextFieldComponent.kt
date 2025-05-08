@@ -26,7 +26,8 @@ fun TextFieldComponent(
     modifier: Modifier = Modifier,
     label: String? = null,
     isError: Boolean = false,
-    trailingIcon:  @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     enabled: Boolean = true,
@@ -63,6 +64,7 @@ fun TextFieldComponent(
             onValueChange = onValueChange,
             visualTransformation = visualTransformation,
             shape = shape,
+            leadingIcon = leadingIcon,
             trailingIcon = trailingIcon
         )
     }

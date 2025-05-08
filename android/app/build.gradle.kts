@@ -79,6 +79,12 @@ dependencies {
 
     implementation(libs.androidx.ui.text.google.fonts)
 
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
+
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.ktor3)
+
     implementation(project(":domain"))
     implementation(project(":data"))
 }

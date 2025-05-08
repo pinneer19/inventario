@@ -1,11 +1,13 @@
 package dev.logvinovich.inventario.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.Lob
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 
 @Entity
@@ -16,16 +18,20 @@ data class Product(
     @Column(name = "id")
     val id: Long? = null,
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     val name: String,
 
-    @Column(name = "description", nullable = false)
-    val description: String,
+    @Column(name = "description")
+    val description: String?,
 
     @Column(name = "barcode", nullable = false)
     val barcode: String,
 
-    @Lob
-    @Column(name = "photo", nullable = false, length = 1000)
-    val photo: ByteArray
+    @Column(name = "imageUrl", unique = true)
+    val imageUrl: String?,
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "organization_id")
+    val organization: Organization
 )

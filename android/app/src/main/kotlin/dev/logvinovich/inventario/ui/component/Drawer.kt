@@ -81,7 +81,7 @@ fun DetailedDrawerExample(
                         label = { Text("Settings") },
                         selected = false,
                         icon = { Icon(Icons.Outlined.Settings, contentDescription = null) },
-                        badge = { Text("20") }, // Placeholder
+                        badge = { Text("20") },
                         onClick = { /* Handle click */ }
                     )
                     NavigationDrawerItem(

@@ -4,5 +4,6 @@
         <item name="android:windowSplashScreenBackground">#737BA4</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_app_anim</item>
         <item name="postSplashScreenTheme">@style/Theme.Inventario</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 </resources>
