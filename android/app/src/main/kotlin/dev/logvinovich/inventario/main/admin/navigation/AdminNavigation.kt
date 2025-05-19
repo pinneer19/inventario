@@ -1,26 +1,26 @@
 package dev.logvinovich.inventario.main.admin.navigation
 
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
+import dev.logvinovich.inventario.main.RoutingScreen
 import dev.logvinovich.inventario.main.admin.AdminScreen
-import dev.logvinovich.inventario.main.admin.product.details.navigateToProductDetails
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 
 @Serializable
-data object AdminDestination
+data class AdminDestination(val adminId: Long)
 
-fun NavGraphBuilder.adminScreen(navController: NavController) {
-    composable<AdminDestination> { navBackStackEntry ->
-        AdminScreen(navController = navController)
+fun NavGraphBuilder.adminScreen(
+    navController: NavController
+) {
+    composable<AdminDestination> {
+        val adminId = it.toRoute<AdminDestination>().adminId
+        AdminScreen(navController = navController, adminId = adminId)
     }
 }
 
-fun NavController.navigateToAdmin() = navigate(AdminDestination) {
-    popUpTo(AdminDestination) {
-        inclusive = true
-    }
+fun NavController.navigateToAdmin(adminId: Long) = navigate(AdminDestination(adminId)) {
+    popUpTo(RoutingScreen) { inclusive = true }
+    launchSingleTop = true
 }

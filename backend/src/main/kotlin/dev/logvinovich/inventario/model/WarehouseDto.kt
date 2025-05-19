@@ -1,6 +1,5 @@
 package dev.logvinovich.inventario.model
 
-import dev.logvinovich.inventario.entity.Organization
 import dev.logvinovich.inventario.entity.User
 import dev.logvinovich.inventario.entity.Warehouse
 
@@ -15,5 +14,5 @@ fun Warehouse.toDto() = WarehouseDto(
     id = id,
     name = name,
     organizationId = organization.id ?: -1,
-    managers = managers
+    managers = managers.toList()
 )

@@ -21,4 +21,8 @@ interface WarehouseService {
     fun assignManagerToWarehouse(request: AssignManagerRequest): ServiceResult<User>
 
     fun unassignManagerFromWarehouse(request: UnassignManagerRequest): ServiceResult<User>
+
+    fun getWarehousesByManagerId(managerId: Long): ServiceResult<List<Warehouse>>
+
+    fun getWarehouses(): List<Warehouse>
 }

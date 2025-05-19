@@ -8,7 +8,6 @@ import dev.logvinovich.inventario.model.UserDto
 import dev.logvinovich.inventario.model.WarehouseDto
 import dev.logvinovich.inventario.model.toDto
 import dev.logvinovich.inventario.model.toResponseEntity
-import dev.logvinovich.inventario.service.user.UserService
 import dev.logvinovich.inventario.service.warehouse.WarehouseService
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -26,8 +25,7 @@ import org.springframework.web.bind.annotation.RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping("/warehouses")
 class WarehouseController(
-    private val warehouseService: WarehouseService,
-    private val userService: UserService
+    private val warehouseService: WarehouseService
 ) {
     @PostMapping
     fun createWarehouse(
@@ -57,10 +55,28 @@ class WarehouseController(
     }
 
     @GetMapping
-    fun getOrganizationWarehouses(@RequestParam organizationId: Long): ResponseEntity<List<WarehouseDto>> {
-        return ResponseEntity.ok(
-            warehouseService.getWarehousesByOrganizationId(organizationId).map { it.toDto() }
-        )
+    fun getWarehouses(
+        @RequestParam(required = false) organizationId: Long?,
+        @RequestParam(required = false) managerId: Long?
+    ): ResponseEntity<List<WarehouseDto>> {
+        return when {
+            organizationId != null -> {
+                val result = warehouseService.getWarehousesByOrganizationId(organizationId).map { it.toDto() }
+                ResponseEntity.ok(result)
+            }
+
+            managerId != null -> {
+                val result = warehouseService.getWarehousesByManagerId(managerId)
+                result.toResponseEntity { entityList ->
+                    entityList.map(Warehouse::toDto)
+                }
+            }
+
+            else -> {
+                val warehouses = warehouseService.getWarehouses().map { it.toDto() }
+                ResponseEntity.ok(warehouses)
+            }
+        }
     }
 
     @PostMapping("/assign-manager")

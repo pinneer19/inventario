@@ -7,13 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.logvinovich.data.JwtManager
-import dev.logvinovich.domain.model.AuthToken
-import dev.logvinovich.domain.model.Role
-import dev.logvinovich.domain.usecase.auth.GoogleAuthUseCase
-import dev.logvinovich.domain.usecase.auth.LoginUseCase
-import dev.logvinovich.domain.usecase.auth.RegisterUseCase
-import dev.logvinovich.inventario.auth.util.getUserRole
+import dev.logvinovich.inventario.data.JwtManager
+import dev.logvinovich.inventario.domain.model.AuthToken
+import dev.logvinovich.inventario.domain.model.Role
+import dev.logvinovich.inventario.domain.usecase.auth.GoogleAuthUseCase
+import dev.logvinovich.inventario.domain.usecase.auth.LoginUseCase
+import dev.logvinovich.inventario.domain.usecase.auth.RegisterUseCase
+import dev.logvinovich.inventario.auth.util.getUserData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -47,7 +47,7 @@ class AuthViewModel @Inject constructor(
                 if (!validateInputFields(username, password)) return
 
                 authenticate {
-                    registerUseCase(username, password, selectedRole)
+                    registerUseCase(username, password, userData.role)
                 }
             }
 
@@ -69,6 +69,7 @@ class AuthViewModel @Inject constructor(
                 _uiState.update { it.copy(usernameError = true) }
                 return false
             }
+
             password.isEmpty() -> {
                 _uiState.update { it.copy(passwordError = true) }
                 return false
@@ -114,7 +115,7 @@ class AuthViewModel @Inject constructor(
                     it.copy(
                         authenticated = true,
                         loading = false,
-                        selectedRole = getUserRole(accessToken)
+                        userData = getUserData(accessToken)
                     )
                 }
             } else {
@@ -145,9 +146,9 @@ class AuthViewModel @Inject constructor(
 
     private fun toggleUserRole() {
         _uiState.update {
-            when (it.selectedRole) {
-                Role.MANAGER -> it.copy(selectedRole = Role.ADMIN)
-                Role.ADMIN -> it.copy(selectedRole = Role.MANAGER)
+            when (it.userData.role) {
+                Role.MANAGER -> it.copy(userData = it.userData.copy(role = Role.ADMIN))
+                Role.ADMIN -> it.copy(userData = it.userData.copy(role = Role.MANAGER))
             }
         }
     }

@@ -8,7 +8,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import dev.logvinovich.domain.model.Product
+import dev.logvinovich.inventario.domain.model.Product
 import dev.logvinovich.inventario.main.admin.product.details.viewmodel.ProductDetailsViewModel
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -20,10 +20,7 @@ data class ProductDetailsDestination(
     val product: Product? = null
 )
 
-fun NavGraphBuilder.productDetailsScreen(
-    navController: NavController
-    //onNavigateUp: (Product?) -> Unit
-) {
+fun NavGraphBuilder.productDetailsScreen(navController: NavController) {
     composable<ProductDetailsDestination>(
         typeMap = mapOf(
             typeOf<Product?>() to ProductNavType

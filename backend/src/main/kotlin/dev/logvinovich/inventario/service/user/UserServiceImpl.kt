@@ -3,6 +3,7 @@ package dev.logvinovich.inventario.service.user
 import dev.logvinovich.inventario.repository.UserRepository
 import dev.logvinovich.inventario.entity.User
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -25,7 +26,7 @@ class UserServiceImpl @Autowired constructor(
     }
 
     override fun getUserById(id: Long): User? {
-        return userRepository.findById(id).orElse(null)
+        return userRepository.findByIdOrNull(id)
     }
 
     override fun findOrInsert(user: User): User {

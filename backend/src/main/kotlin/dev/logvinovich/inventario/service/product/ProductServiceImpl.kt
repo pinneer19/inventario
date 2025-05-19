@@ -6,19 +6,18 @@ import dev.logvinovich.inventario.model.ServiceResult
 import dev.logvinovich.inventario.repository.OrganizationRepository
 import dev.logvinovich.inventario.repository.ProductRepository
 import dev.logvinovich.inventario.util.ImageUtil
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 
 @Service
-@Transactional
 class ProductServiceImpl(
     private val productRepository: ProductRepository,
     private val organizationRepository: OrganizationRepository,
     private val imageUtil: ImageUtil
 ) : ProductService {
     override fun createProduct(product: ProductDto, productImage: MultipartFile?): ServiceResult<Product> {
-        val organization = organizationRepository.findById(product.organizationId).orElse(null)
+        val organization = organizationRepository.findByIdOrNull(product.organizationId)
             ?: return ServiceResult.NotFound
 
         val imageUrl = productImage?.let { image -> imageUtil.saveImage(image) }
@@ -39,7 +38,7 @@ class ProductServiceImpl(
     }
 
     override fun getProductById(id: Long): Product? {
-        return productRepository.findById(id).orElse(null)
+        return productRepository.findByIdOrNull(id)
     }
 
     override fun updateProduct(id: Long, product: ProductDto, productImage: MultipartFile?): ServiceResult<Product> {

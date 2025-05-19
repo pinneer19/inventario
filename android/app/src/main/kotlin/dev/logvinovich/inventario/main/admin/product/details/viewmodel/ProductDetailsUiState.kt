@@ -1,6 +1,6 @@
 package dev.logvinovich.inventario.main.admin.product.details.viewmodel
 
-import dev.logvinovich.domain.model.Product
+import dev.logvinovich.inventario.domain.model.Product
 
 data class ProductDetailsUiState(
     val loading: Boolean = false,

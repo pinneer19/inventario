@@ -1,8 +1,5 @@
 package dev.logvinovich.inventario.auth.ui
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -43,7 +40,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import dev.logvinovich.domain.model.Role
+import dev.logvinovich.inventario.domain.model.Role
 import dev.logvinovich.inventario.R
 import dev.logvinovich.inventario.ui.component.ProgressCard
 import dev.logvinovich.inventario.ui.component.RoleChip

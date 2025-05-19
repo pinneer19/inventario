@@ -31,6 +31,7 @@ class JwtUtil (
         return Jwts.builder()
             .subject(user.username)
             .claim("role", user.role)
+            .claim("userId", user.id)
             .claim("type", if (refresh) "refresh" else "access")
             .issuedAt(Date(now))
             .expiration(Date(now + expiration))

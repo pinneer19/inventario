@@ -21,6 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "inventario"
 
-include(":app")
-include(":domain")
-include(":data")
+include(":app", ":data", ":domain")

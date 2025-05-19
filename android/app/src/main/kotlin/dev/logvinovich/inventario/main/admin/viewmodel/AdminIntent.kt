@@ -1,8 +1,12 @@
 package dev.logvinovich.inventario.main.admin.viewmodel
 
+import dev.logvinovich.inventario.main.admin.navigation.AdminSection
+
 sealed interface AdminIntent {
     data object ClearUiMessage : AdminIntent
     data class UpdateLoading(val loading: Boolean) : AdminIntent
+    data class ChangeSection(val section: AdminSection, val index: Int) : AdminIntent
+    data object Logout : AdminIntent
 
     // Organization
     data object CreateOrganization : AdminIntent

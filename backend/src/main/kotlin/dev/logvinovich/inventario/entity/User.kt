@@ -8,8 +8,7 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
+import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
 import org.springframework.security.core.userdetails.UserDetails
 
@@ -34,13 +33,16 @@ data class User(
     val role: Role = Role.MANAGER,
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "warehouse_id")
-    var warehouse: Warehouse? = null
+    @ManyToMany(mappedBy = "managers")
+    val warehouses: MutableSet<Warehouse> = mutableSetOf()
 ) : UserDetails {
     override fun getAuthorities() = listOf(role)
 
     override fun getPassword() = password
 
     override fun getUsername() = username
+
+    override fun equals(other: Any?) = other is User && id == other.id
+
+    override fun hashCode() = id?.hashCode() ?: 0
 }

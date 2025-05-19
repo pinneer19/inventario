@@ -6,43 +6,56 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import dev.logvinovich.domain.model.Product
-import dev.logvinovich.domain.model.Role
+import dev.logvinovich.inventario.domain.model.Role
+import dev.logvinovich.inventario.auth.model.UserData
 import dev.logvinovich.inventario.main.admin.navigation.adminScreen
 import dev.logvinovich.inventario.main.admin.navigation.navigateToAdmin
 import dev.logvinovich.inventario.main.admin.product.details.productDetailsScreen
+import dev.logvinovich.inventario.main.admin.stats.statisticScreen
+import dev.logvinovich.inventario.main.chat.chatScreen
 import dev.logvinovich.inventario.main.manager.managerScreen
 import dev.logvinovich.inventario.main.manager.navigateToManager
+import dev.logvinovich.inventario.main.sale.item.saleItemScreen
+import dev.logvinovich.inventario.main.sale.salesScreen
+import dev.logvinovich.inventario.main.warehouse.item.inventoryItemScreen
+import dev.logvinovich.inventario.main.warehouse.warehouseScreen
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
-data class MainGraph(val role: Role)
+data class MainGraph(val userDataJson: String)
 
 @Serializable
-private data object RoutingScreen
+data object RoutingScreen
 
 fun NavGraphBuilder.mainNavigation(navController: NavController) {
     navigation<MainGraph>(
         startDestination = RoutingScreen
     ) {
         composable<RoutingScreen> {
-            val userRole = it.arguments?.getSerializable("role", Role::class.java) ?: Role.MANAGER
-            LaunchedEffect(userRole) {
-                when (userRole) {
-                    Role.ADMIN -> navController.navigateToAdmin()
-                    Role.MANAGER -> navController.navigateToManager()
+            val userData = Json.decodeFromString<UserData>(
+                requireNotNull(it.arguments?.getString("userDataJson"))
+            )
+            LaunchedEffect(userData) {
+                when (userData.role) {
+                    Role.ADMIN -> navController.navigateToAdmin(userData.id)
+                    Role.MANAGER -> navController.navigateToManager(userData.id)
                 }
             }
         }
         adminScreen(navController)
-        managerScreen()
+        managerScreen(navController)
+        warehouseScreen(navController)
         productDetailsScreen(navController)
+        inventoryItemScreen(navController)
+        salesScreen(navController)
+        saleItemScreen(navController::navigateUp)
+        chatScreen(navController)
+        statisticScreen(navController)
     }
 }
 
-fun NavController.onNavigateToMainGraph(role: Role) = navigate(MainGraph(role)) {
+fun NavController.onNavigateToMainGraph(userDataJson: String) = navigate(MainGraph(userDataJson)) {
     popUpTo(graph.findStartDestination().id) {
         inclusive = true
     }

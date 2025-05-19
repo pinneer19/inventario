@@ -8,7 +8,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.logvinovich.data.di.DataModule
+import dev.logvinovich.inventario.data.di.DataModule
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

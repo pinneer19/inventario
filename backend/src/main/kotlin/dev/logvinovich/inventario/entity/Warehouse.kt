@@ -1,5 +1,6 @@
 package dev.logvinovich.inventario.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -7,6 +8,8 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
+import jakarta.persistence.JoinTable
+import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
@@ -25,16 +28,30 @@ data class Warehouse(
     @JoinColumn(name = "organization_id")
     val organization: Organization,
 
-    @OneToMany(mappedBy = "warehouse", cascade = [CascadeType.ALL])
-    val managers: MutableList<User> = mutableListOf()
+    @JsonIgnore
+    @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    @JoinTable(
+        name = "warehouse_managers",
+        joinColumns = [JoinColumn(name = "warehouse_id")],
+        inverseJoinColumns = [JoinColumn(name = "user_id")]
+    )
+    val managers: MutableSet<User> = mutableSetOf(),
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "warehouse", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val inventoryItems: List<InventoryItem> = emptyList()
 ) {
     fun assignManager(manager: User) {
         managers.add(manager)
-        manager.warehouse = this
+        manager.warehouses.add(this)
     }
 
     fun unassignManager(manager: User) {
         managers.remove(manager)
-        manager.warehouse = null
+        manager.warehouses.remove(this)
     }
+
+    override fun equals(other: Any?) = other is Warehouse && id == other.id
+
+    override fun hashCode() = id?.hashCode() ?: 0
 }

@@ -4,9 +4,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    kotlin("kapt")
     alias(libs.plugins.dagger.hilt.android)
     kotlin("plugin.serialization") version "2.1.20"
+    kotlin("kapt")
 }
 
 android {
@@ -84,6 +84,16 @@ dependencies {
 
     implementation(libs.coil.compose)
     implementation(libs.coil.network.ktor3)
+
+    implementation(libs.zxing.core)
+    implementation(libs.barcode.scanning)
+
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+
+    implementation (libs.compose.charts)
 
     implementation(project(":domain"))
     implementation(project(":data"))

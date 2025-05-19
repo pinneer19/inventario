@@ -26,11 +26,13 @@ fun TextFieldComponent(
     modifier: Modifier = Modifier,
     label: String? = null,
     isError: Boolean = false,
+    readOnly: Boolean = false,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     enabled: Boolean = true,
+    supportingText: String? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     shape: Shape = RoundedCornerShape(10.dp),
 ) {
@@ -56,16 +58,20 @@ fun TextFieldComponent(
             value = value,
             enabled = enabled,
             singleLine = true,
-            placeholder = {
-                Text(text = placeholder)
-            },
+            placeholder = { Text(text = placeholder) },
+            readOnly = readOnly,
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
             onValueChange = onValueChange,
             visualTransformation = visualTransformation,
             shape = shape,
             leadingIcon = leadingIcon,
-            trailingIcon = trailingIcon
+            trailingIcon = trailingIcon,
+            supportingText = {
+                supportingText?.let {
+                    Text(text = it)
+                }
+            }
         )
     }
 }

@@ -3,9 +3,8 @@ package dev.logvinovich.inventario.splash.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.logvinovich.data.JwtManager
-import dev.logvinovich.inventario.auth.util.getUserRole
-import kotlinx.coroutines.delay
+import dev.logvinovich.inventario.data.JwtManager
+import dev.logvinovich.inventario.auth.util.getUserData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -29,13 +28,13 @@ class TokenViewModel @Inject constructor(
             val token = jwtManager.getRefreshToken()
             val isTokenValid = jwtManager.hasValidRefreshToken()
 
-            val userRole = if (isTokenValid && token != null) getUserRole(token) else null
+            val userData = if (isTokenValid && token != null) getUserData(token) else null
 
             _uiState.update {
                 it.copy(
                     loading = false,
                     authenticated = isTokenValid,
-                    userRole = userRole
+                    userData = userData
                 )
             }
         }

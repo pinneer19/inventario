@@ -4,6 +4,7 @@ import dev.logvinovich.inventario.entity.Organization
 import dev.logvinovich.inventario.model.ServiceResult
 import dev.logvinovich.inventario.repository.OrganizationRepository
 import dev.logvinovich.inventario.security.CurrentUserProvider
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
@@ -23,13 +24,13 @@ class OrganizationServiceImpl(
     }
 
     override fun getOrganizationById(organizationId: Long): Organization? {
-        return organizationRepository.findById(organizationId).orElse(null)
+        return organizationRepository.findByIdOrNull(organizationId)
     }
 
     override fun updateOrganizationName(organizationId: Long, newName: String): ServiceResult<Organization> {
         val user = currentUserProvider.getCurrentUser()
 
-        val organization = organizationRepository.findById(organizationId).orElse(null)
+        val organization = organizationRepository.findByIdOrNull(organizationId)
             ?: return ServiceResult.NotFound
 
         if (organization.adminUser.id != user.id) {
@@ -45,7 +46,7 @@ class OrganizationServiceImpl(
     override fun deleteOrganization(organizationId: Long): ServiceResult<Unit> {
         val user = currentUserProvider.getCurrentUser()
 
-        val organization = organizationRepository.findById(organizationId).orElse(null)
+        val organization = organizationRepository.findByIdOrNull(organizationId)
             ?: return ServiceResult.NotFound
 
         if (organization.adminUser.id != user.id) {

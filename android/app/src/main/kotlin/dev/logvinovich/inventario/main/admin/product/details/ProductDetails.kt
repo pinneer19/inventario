@@ -1,9 +1,9 @@
 package dev.logvinovich.inventario.main.admin.product.details
 
-import android.R.attr.description
-import android.R.attr.name
+import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +22,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Inventory2
@@ -38,24 +39,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.core.content.ContextCompat
 import coil3.compose.SubcomposeAsyncImage
-import dev.logvinovich.domain.model.Product
+import dev.logvinovich.inventario.domain.model.Product
 import dev.logvinovich.inventario.R
 import dev.logvinovich.inventario.main.admin.product.details.viewmodel.ProductDetailsIntent
 import dev.logvinovich.inventario.main.admin.product.details.viewmodel.ProductDetailsViewModel
+import dev.logvinovich.inventario.ui.component.BarcodeScannerDialog
 import dev.logvinovich.inventario.ui.component.ProgressCard
 import dev.logvinovich.inventario.ui.component.TextFieldComponent
+import dev.logvinovich.inventario.ui.util.SnackbarController
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,6 +75,21 @@ fun ProductDetailsScreen(
     onNavigateUp: (Product?) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val scope = rememberCoroutineScope()
+    var showScanner by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    var cameraPermissionState by remember { mutableStateOf(false) }
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            cameraPermissionState = isGranted
+            if (!isGranted) {
+                scope.launch {
+                    SnackbarController.sendMessageResEvent(R.string.camera_not_granted)
+                }
+            }
+        }
+    )
 
     val pickImage = rememberLauncherForActivityResult(contract = PickVisualMedia()) { uri ->
         viewModel.handleIntent(ProductDetailsIntent.UpdateImageUri(uri))
@@ -164,7 +190,8 @@ fun ProductDetailsScreen(
                     text = stringResource(R.string.pick_image),
                     modifier = Modifier.padding(top = 30.dp),
                     style = MaterialTheme.typography.bodyLarge.copy(fontSize = 19.sp),
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center
                 )
             }
 
@@ -208,6 +235,30 @@ fun ProductDetailsScreen(
                         contentDescription = "Product barcode"
                     )
                 },
+                trailingIcon = {
+                    IconButton(
+                        onClick = {
+                            when {
+                                ContextCompat.checkSelfPermission(
+                                    context,
+                                    android.Manifest.permission.CAMERA
+                                ) == PackageManager.PERMISSION_GRANTED -> {
+                                    cameraPermissionState = true
+                                    showScanner = true
+                                }
+
+                                else -> {
+                                    permissionLauncher.launch(android.Manifest.permission.CAMERA)
+                                }
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.CameraAlt,
+                            contentDescription = "Scan barcode",
+                        )
+                    }
+                },
                 keyboardActions = KeyboardActions(
                     onDone = { viewModel.handleIntent(ProductDetailsIntent.SaveProduct) }
                 ),
@@ -223,10 +274,23 @@ fun ProductDetailsScreen(
                 shape = RoundedCornerShape(15.dp),
                 onClick = { viewModel.handleIntent(ProductDetailsIntent.SaveProduct) }
             ) {
-                Text(text = "Save", style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    text = stringResource(R.string.save),
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
 
             Spacer(modifier = Modifier.height(30.dp))
         }
+    }
+
+    if (showScanner && cameraPermissionState) {
+        BarcodeScannerDialog(
+            onBarcodeScanned = {
+                viewModel.handleIntent(ProductDetailsIntent.UpdateBarcode(it))
+                showScanner = false
+            },
+            onDismiss = { showScanner = false }
+        )
     }
 }

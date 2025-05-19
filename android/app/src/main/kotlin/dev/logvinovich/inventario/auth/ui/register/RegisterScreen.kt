@@ -16,9 +16,9 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import dev.logvinovich.domain.model.Role
 import dev.logvinovich.inventario.BuildConfig
 import dev.logvinovich.inventario.R
+import dev.logvinovich.inventario.auth.model.UserData
 import dev.logvinovich.inventario.auth.ui.AuthScreen
 import dev.logvinovich.inventario.auth.viewmodel.AuthIntent
 import dev.logvinovich.inventario.auth.viewmodel.AuthViewModel
@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterScreen(
-    onNavigateToMain: (Role) -> Unit,
+    onNavigateToMain: (String) -> Unit,
     onNavigateToLogin: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
@@ -48,7 +48,7 @@ fun RegisterScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(uiState.authenticated, uiState.error) {
-        if (uiState.authenticated) onNavigateToMain(uiState.selectedRole)
+        if (uiState.authenticated) onNavigateToMain(uiState.userData.toJson())
         if (uiState.error != null) {
             SnackbarController.sendEvent(
                 SnackbarEvent(message = context.getString(R.string.register_fail))
@@ -63,7 +63,7 @@ fun RegisterScreen(
             password = uiState.password,
             isLoading = uiState.loading,
             isPasswordVisible = uiState.passwordVisible,
-            selectedRole = uiState.selectedRole,
+            selectedRole = uiState.userData.role,
             showRoleButtons = true,
             onRoleUpdate = {
                 viewModel.handleIntent(AuthIntent.ToggleUserRole)

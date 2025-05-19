@@ -1,39 +1,38 @@
 package dev.logvinovich.inventario.main.admin.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.logvinovich.domain.model.Organization
-import dev.logvinovich.domain.model.Product
-import dev.logvinovich.domain.model.User
-import dev.logvinovich.domain.model.Warehouse
-import dev.logvinovich.domain.usecase.organization.CreateOrganizationUseCase
-import dev.logvinovich.domain.usecase.organization.GetAdminOrganizationsUseCase
-import dev.logvinovich.domain.usecase.warehouse.AssignManagerUseCase
-import dev.logvinovich.domain.usecase.warehouse.CreateWarehouseUseCase
-import dev.logvinovich.domain.usecase.warehouse.DeleteWarehouseUseCase
-import dev.logvinovich.domain.usecase.warehouse.GetOrganizationWarehousesUseCase
-import dev.logvinovich.domain.usecase.warehouse.UnassignManagerUseCase
+import dev.logvinovich.inventario.domain.model.Organization
+import dev.logvinovich.inventario.domain.model.User
+import dev.logvinovich.inventario.domain.model.Warehouse
+import dev.logvinovich.inventario.domain.usecase.auth.LogoutUseCase
+import dev.logvinovich.inventario.domain.usecase.organization.CreateOrganizationUseCase
+import dev.logvinovich.inventario.domain.usecase.organization.GetAdminOrganizationsUseCase
+import dev.logvinovich.inventario.domain.usecase.warehouse.AssignManagerUseCase
+import dev.logvinovich.inventario.domain.usecase.warehouse.CreateWarehouseUseCase
+import dev.logvinovich.inventario.domain.usecase.warehouse.DeleteWarehouseUseCase
+import dev.logvinovich.inventario.domain.usecase.warehouse.GetOrganizationWarehousesUseCase
+import dev.logvinovich.inventario.domain.usecase.warehouse.UnassignManagerUseCase
 import dev.logvinovich.inventario.R
+import dev.logvinovich.inventario.main.admin.navigation.AdminSection
 import dev.logvinovich.inventario.ui.util.UiText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AdminViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
     private val getAdminOrganizationsUseCase: GetAdminOrganizationsUseCase,
     private val createOrganizationUseCase: CreateOrganizationUseCase,
     private val getOrganizationWarehousesUseCase: GetOrganizationWarehousesUseCase,
     private val createWarehouseUseCase: CreateWarehouseUseCase,
     private val assignManagerUseCase: AssignManagerUseCase,
     private val unassignManagerUseCase: UnassignManagerUseCase,
-    private val deleteWarehouseUseCase: DeleteWarehouseUseCase
+    private val deleteWarehouseUseCase: DeleteWarehouseUseCase,
+    private val logoutUseCase: LogoutUseCase
 ) : ViewModel() {
     private var _uiState = MutableStateFlow(AdminUiState())
     val uiState = _uiState.asStateFlow()
@@ -45,7 +44,9 @@ class AdminViewModel @Inject constructor(
     fun handleIntent(intent: AdminIntent) {
         when (intent) {
             AdminIntent.ClearUiMessage -> clearUiMessage()
+            AdminIntent.Logout -> logout()
             is AdminIntent.UpdateLoading -> updateLoading(intent.loading)
+            is AdminIntent.ChangeSection -> changeSection(intent.section, intent.index)
 
             AdminIntent.CreateOrganization -> createOrganization()
             AdminIntent.ShowOrganizationDialog -> updateOrganizationDialogVisibility(visible = true)
@@ -88,11 +89,13 @@ class AdminViewModel @Inject constructor(
                 if (result.isSuccess) {
                     it.copy(
                         organizations = result.getOrThrow(),
-                        selectedOrganizationId = result.getOrThrow().firstOrNull()?.id
+                        selectedOrganizationId = result.getOrThrow().firstOrNull()?.id,
+                        loading = false
                     )
                 } else {
                     it.copy(
                         uiMessage = UiText.Plain(result.exceptionOrNull()?.message.orEmpty()),
+                        loading = false
                     )
                 }
             }
@@ -107,8 +110,21 @@ class AdminViewModel @Inject constructor(
         _uiState.update { it.copy(uiMessage = null) }
     }
 
+    private fun logout() {
+        viewModelScope.launch { logoutUseCase() }
+    }
+
     private fun updateLoading(loading: Boolean) {
         _uiState.update { it.copy(loading = loading) }
+    }
+
+    private fun changeSection(section: AdminSection, index: Int) {
+        _uiState.update {
+            it.copy(
+                currentSection = section,
+                selectedNavigationIndex = index
+            )
+        }
     }
 
     private fun createOrganization() {
@@ -350,12 +366,5 @@ class AdminViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    override fun onCleared() {
-        // todo: save last select organization & warehouse
-        // _uiState.value.selectedWarehouseId
-        // _uiState.value.selectedOrganizationId
-        super.onCleared()
     }
 }

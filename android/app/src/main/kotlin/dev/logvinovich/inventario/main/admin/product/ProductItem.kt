@@ -15,27 +15,29 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import dev.logvinovich.domain.model.Product
 import kotlin.math.roundToInt
 
 @Composable
-fun ProductItem(
-    product: Product,
+fun SwipeableItem(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    onDeleteProduct: () -> Unit,
+    onDelete: () -> Unit,
+    content: @Composable () -> Unit
 ) {
+    var isRemoved by remember { mutableStateOf(false) }
     val swipeToDismissBoxState = rememberSwipeToDismissBoxState(
         confirmValueChange = { state ->
             when (state) {
                 SwipeToDismissBoxValue.EndToStart -> {
-                    onDeleteProduct()
+                    isRemoved = true
                     true
                 }
 
@@ -43,6 +45,12 @@ fun ProductItem(
             }
         }
     )
+
+    LaunchedEffect(isRemoved) {
+        if (isRemoved) {
+            onDelete()
+        }
+    }
 
     SwipeToDismissBox(
         modifier = modifier,
@@ -93,9 +101,6 @@ fun ProductItem(
             }
         }
     ) {
-        ProductCard(
-            product = product,
-            onClick = onClick,
-        )
+        content()
     }
 }

@@ -1,6 +1,6 @@
 package dev.logvinovich.inventario.auth.viewmodel
 
-import dev.logvinovich.domain.model.Role
+import dev.logvinovich.inventario.auth.model.UserData
 
 data class AuthUiState(
     val loading: Boolean = false,
@@ -11,5 +11,5 @@ data class AuthUiState(
     val passwordError: Boolean = false,
     val passwordVisible: Boolean = false,
     val authenticated: Boolean = false,
-    val selectedRole: Role = Role.MANAGER
+    val userData: UserData = UserData()
 )

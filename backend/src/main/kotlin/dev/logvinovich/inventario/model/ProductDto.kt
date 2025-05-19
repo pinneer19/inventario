@@ -19,3 +19,5 @@ fun Product.toDto() = ProductDto(
     imageUrl = imageUrl,
     organizationId = organization.id ?: -1
 )
+
+data class ProductRefDto(val id: Long)

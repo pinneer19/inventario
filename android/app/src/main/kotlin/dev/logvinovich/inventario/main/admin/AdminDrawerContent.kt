@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,22 +21,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import dev.logvinovich.domain.model.Organization
 import dev.logvinovich.inventario.R
+import dev.logvinovich.inventario.domain.model.Organization
+import dev.logvinovich.inventario.main.admin.viewmodel.AdminIntent
+import dev.logvinovich.inventario.main.admin.viewmodel.AdminViewModel
 import dev.logvinovich.inventario.ui.component.InputDialog
 
 @Composable
 fun AdminDrawerContent(
+    viewModel: AdminViewModel,
     organizations: List<Organization>,
     selectedOrganizationId: Long,
-    onOrganizationClick: (Long) -> Unit,
     organizationName: String,
     organizationNameHasError: Boolean,
     showOrganizationDialog: Boolean,
-    onShowOrganizationDialog: () -> Unit,
-    onDismissOrganizationDialog: () -> Unit,
-    onUpdateOrganizationName: (String) -> Unit,
-    onCreateOrganization: () -> Unit,
+    onCloseDrawer: () -> Unit,
+    onStatsNavigate: () -> Unit
 ) {
     ModalDrawerSheet {
         LazyColumn(
@@ -44,7 +45,9 @@ fun AdminDrawerContent(
         ) {
             item(key = "Drawer top bar") {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 12.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -55,7 +58,9 @@ fun AdminDrawerContent(
                     )
 
                     IconButton(
-                        onClick = onShowOrganizationDialog
+                        onClick = {
+                            viewModel.handleIntent(AdminIntent.ShowOrganizationDialog)
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
@@ -71,12 +76,35 @@ fun AdminDrawerContent(
                 key = { organization -> organization.id }
             ) { organization ->
                 NavigationDrawerItem(
-                    modifier = Modifier.padding(top = 10.dp).animateItem(),
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .animateItem(),
                     label = {
                         Text(organization.name)
                     },
                     selected = organization.id == selectedOrganizationId,
-                    onClick = { onOrganizationClick(organization.id) }
+                    onClick = {
+                        viewModel.handleIntent(AdminIntent.SelectOrganization(organization.id))
+                        onCloseDrawer()
+                    }
+                )
+            }
+
+            item(key = "Stats navigate") {
+                HorizontalDivider(modifier = Modifier.padding(bottom = 10.dp))
+
+                NavigationDrawerItem(
+                    selected = false,
+                    label = {
+                        Text(
+                            text = stringResource(R.string.chat),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    },
+                    icon = {
+                        Icon(imageVector = Icons.Default.BarChart, contentDescription = "stats")
+                    },
+                    onClick = onStatsNavigate
                 )
             }
         }
@@ -86,10 +114,15 @@ fun AdminDrawerContent(
         InputDialog(
             title = stringResource(R.string.creating_organization),
             inputValue = organizationName,
-            onValueChange = onUpdateOrganizationName,
+            onValueChange = { viewModel.handleIntent(AdminIntent.UpdateOrganizationName(it)) },
             inputPlaceholder = stringResource(R.string.enter_organization_name),
-            onSubmit = onCreateOrganization,
-            onDismissRequest = onDismissOrganizationDialog,
+            onSubmit = {
+                viewModel.handleIntent(AdminIntent.DismissOrganizationDialog)
+                viewModel.handleIntent(AdminIntent.CreateOrganization)
+            },
+            onDismissRequest = {
+                viewModel.handleIntent(AdminIntent.DismissOrganizationDialog)
+            },
             isError = organizationNameHasError
         )
     }

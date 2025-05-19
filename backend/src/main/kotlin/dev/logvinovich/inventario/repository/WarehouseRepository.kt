@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface WarehouseRepository: JpaRepository<Warehouse, Long> {
     fun getWarehousesByOrganizationId(organizationId: Long): List<Warehouse>
+
+    fun findAllByManagers_Id(managerId: Long): List<Warehouse>
 }

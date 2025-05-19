@@ -1,6 +1,7 @@
 package dev.logvinovich.inventario.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -8,6 +9,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 
 @Entity
@@ -27,11 +29,15 @@ data class Product(
     @Column(name = "barcode", nullable = false)
     val barcode: String,
 
-    @Column(name = "imageUrl", unique = true)
+    @Column(name = "image_url", unique = true)
     val imageUrl: String?,
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "organization_id")
-    val organization: Organization
+    val organization: Organization,
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val inventoryItems: List<InventoryItem> = emptyList()
 )

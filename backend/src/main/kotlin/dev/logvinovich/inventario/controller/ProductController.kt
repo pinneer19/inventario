@@ -5,6 +5,7 @@ import dev.logvinovich.inventario.model.ProductDto
 import dev.logvinovich.inventario.model.toDto
 import dev.logvinovich.inventario.model.toResponseEntity
 import dev.logvinovich.inventario.service.product.ProductService
+import dev.logvinovich.inventario.service.warehouse.WarehouseService
 import dev.logvinovich.inventario.util.ImageUtil
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RequestPart
@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile
 @RequestMapping("/products")
 class ProductController(
     private val productService: ProductService,
+    private val warehouseService: WarehouseService,
     private val imageUtil: ImageUtil
 ) {
     @PostMapping
@@ -37,9 +38,28 @@ class ProductController(
     }
 
     @GetMapping
-    fun getOrganizationProduct(@RequestParam organizationId: Long): ResponseEntity<List<ProductDto>> {
-        val products = productService.getOrganizationProducts(organizationId).map { it.toDto() }
-        return ResponseEntity.ok(products)
+    fun getOrganizationProducts(
+        @RequestParam(required = false) organizationId: Long?,
+        @RequestParam(required = false) warehouseId: Long?
+    ): ResponseEntity<List<ProductDto>> {
+        return when {
+            organizationId != null -> {
+                val products = productService.getOrganizationProducts(organizationId).map { it.toDto() }
+                ResponseEntity.ok(products)
+            }
+
+            warehouseId != null -> {
+                val warehouse = warehouseService.findById(warehouseId)
+                    ?: return ResponseEntity.badRequest().build()
+                val products =
+                    productService.getOrganizationProducts(
+                        requireNotNull(warehouse.organization.id)
+                    ).map { it.toDto() }
+                ResponseEntity.ok(products)
+            }
+
+            else -> ResponseEntity.badRequest().build()
+        }
     }
 
     @GetMapping("/{id}")

@@ -29,7 +29,5 @@ fun NavGraphBuilder.authNavigation(navController: NavController) {
 }
 
 fun NavController.onNavigateToAuthGraph() = navigate(AuthGraph) {
-    popUpTo(graph.findStartDestination().id) {
-        inclusive = true
-    }
+    popUpTo(0) { inclusive = true }
 }

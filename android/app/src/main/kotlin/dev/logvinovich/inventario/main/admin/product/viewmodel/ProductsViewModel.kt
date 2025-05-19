@@ -3,11 +3,10 @@ package dev.logvinovich.inventario.main.admin.product.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.logvinovich.domain.model.Product
-import dev.logvinovich.domain.usecase.product.DeleteProductUseCase
-import dev.logvinovich.domain.usecase.product.GetProductsUseCase
+import dev.logvinovich.inventario.domain.model.Product
+import dev.logvinovich.inventario.domain.usecase.product.DeleteProductUseCase
+import dev.logvinovich.inventario.domain.usecase.product.GetProductsUseCase
 import jakarta.inject.Inject
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

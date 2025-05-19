@@ -7,8 +7,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.logvinovich.domain.model.Product
-import dev.logvinovich.domain.usecase.product.SaveProductUseCase
+import dev.logvinovich.inventario.domain.model.Product
+import dev.logvinovich.inventario.domain.usecase.product.SaveProductUseCase
 import dev.logvinovich.inventario.R
 import dev.logvinovich.inventario.ui.util.SnackbarController
 import dev.logvinovich.inventario.util.ImageUtil

@@ -3,14 +3,13 @@ package dev.logvinovich.inventario.auth.ui.login
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import dev.logvinovich.domain.model.Role
 import kotlinx.serialization.Serializable
 
 @Serializable
 data object LoginDestination
 
 fun NavGraphBuilder.loginScreen(
-    onNavigateToMain: (Role) -> Unit,
+    onNavigateToMain: (String) -> Unit,
     onNavigateToRegister: () -> Unit,
 ) {
     composable<LoginDestination> {

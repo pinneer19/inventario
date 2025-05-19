@@ -1,6 +1,6 @@
 package dev.logvinovich.inventario.main.admin.product.viewmodel
 
-import dev.logvinovich.domain.model.Product
+import dev.logvinovich.inventario.domain.model.Product
 
 interface ProductsIntent {
     data class SetOrganizationId(val organizationId: Long) : ProductsIntent

@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import dev.logvinovich.domain.model.Product
+import dev.logvinovich.inventario.domain.model.Product
 import dev.logvinovich.inventario.R
 
 @Composable

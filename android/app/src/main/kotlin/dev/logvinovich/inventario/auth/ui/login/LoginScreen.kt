@@ -17,7 +17,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import dev.logvinovich.inventario.BuildConfig
 import dev.logvinovich.inventario.R
-import dev.logvinovich.domain.model.Role
 import dev.logvinovich.inventario.auth.ui.AuthScreen
 import dev.logvinovich.inventario.auth.viewmodel.AuthIntent
 import dev.logvinovich.inventario.auth.viewmodel.AuthViewModel
@@ -27,7 +26,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
-    onNavigateToMain: (Role) -> Unit,
+    onNavigateToMain: (String) -> Unit,
     onNavigateToRegister: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
@@ -47,7 +46,7 @@ fun LoginScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(uiState.authenticated, uiState.error) {
-        if (uiState.authenticated) onNavigateToMain(uiState.selectedRole)
+        if (uiState.authenticated) onNavigateToMain(uiState.userData.toJson())
         else if (uiState.error != null) {
             SnackbarController.sendEvent(
                 SnackbarEvent(message = context.getString(R.string.wrong_password))

@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface InventoryItemRepository: JpaRepository<InventoryItem, Long> {
     fun findAllByWarehouseId(warehouseId: Long): List<InventoryItem>
+    fun findOneByWarehouseIdAndProductId(warehouseId: Long, productId: Long): InventoryItem?
 }

@@ -10,4 +10,5 @@ kotlin {
 dependencies {
     implementation(libs.jakarta.inject.api)
     api(libs.kotlinx.serialization.json)
+    api(libs.kotlinx.datetime)
 }
