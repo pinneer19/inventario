@@ -25,7 +25,7 @@ class ChatHandler(
     private val jwtUtil: JwtUtil
 ) : TextWebSocketHandler() {
 
-    private val sessions = mutableListOf<WebSocketSession>()
+    private val sessionsByOrganization = mutableMapOf<Long, MutableList<WebSocketSession>>()
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
         val params = extractParams(session)
@@ -39,15 +39,17 @@ class ChatHandler(
                 val claims = jwtUtil.extractAllClaims(token)
                 val userId = (claims["userId"] as? Number)?.toLong() ?: return
 
-                session.attributes["userId"] = userId
                 val sessionOrganizationId = if (organizationId != null) {
                     organizationId
                 } else {
                     val warehouse = warehouseRepository.findByIdOrNull(warehouseId) ?: return
                     warehouse.organization.id
                 }
+                session.attributes["userId"] = userId
                 session.attributes["organizationId"] = sessionOrganizationId
-                sessions.add(session)
+
+                val orgSessions = sessionsByOrganization.getOrPut(sessionOrganizationId ?: -1) { mutableListOf() }
+                orgSessions.add(session)
 
                 val recentMessages = messageRepository.findAllByOrganizationId(requireNotNull(sessionOrganizationId))
                     .sortedBy { it.timestamp }
@@ -80,7 +82,8 @@ class ChatHandler(
 
         val json = Json.encodeToString(savedMessage.toDto())
 
-        sessions.forEach {
+        val orgSessions = sessionsByOrganization[organizationId] ?: return
+        orgSessions.forEach {
             if (it.isOpen) {
                 it.sendMessage(TextMessage(json))
             }
@@ -88,7 +91,11 @@ class ChatHandler(
     }
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
-        sessions.remove(session)
+        val organizationId = session.attributes["organizationId"] as? Long ?: return
+        sessionsByOrganization[organizationId]?.remove(session)
+        if (sessionsByOrganization[organizationId]?.isEmpty() == true) {
+            sessionsByOrganization.remove(organizationId)
+        }
     }
 
     private fun extractParams(session: WebSocketSession): Map<String, String> {

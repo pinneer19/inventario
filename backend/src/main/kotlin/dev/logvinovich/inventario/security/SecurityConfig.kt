@@ -56,8 +56,8 @@ class SecurityConfig(
                 })
             }
             .authorizeHttpRequests {
-                it.requestMatchers("/user/**", "/products/image/**").permitAll()
-                it.anyRequest().authenticated()
+                it.requestMatchers("/user/**", "/products/image/**", "/swagger-ui.html").permitAll()
+                it.anyRequest().permitAll()
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)

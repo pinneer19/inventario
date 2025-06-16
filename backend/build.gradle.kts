@@ -42,6 +42,7 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-gson:0.12.6")
 	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
 	implementation("com.google.api-client:google-api-client:2.7.2")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8")
 }
 
 kotlin {
